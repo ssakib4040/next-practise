@@ -6,6 +6,9 @@ export async function POST(request: Request): Promise<NextResponse> {
   const filename = searchParams.get("filename");
 
   // ⚠️ The below code is for App Router Route Handlers only
+  if (!request.body) {
+    return NextResponse.json({ error: "No file provided" }, { status: 400 });
+  }
   const blob = await put(`external/${filename}`, request.body, {
     access: "public",
   });
@@ -18,7 +21,7 @@ export async function POST(request: Request): Promise<NextResponse> {
   return NextResponse.json(blob);
 }
 
-export async function GET(req, res) {
+export async function GET(req: any, res: any) {
   const ip = req.headers.get("x-forwarded-for") || "Unknown";
   console.log("Client IP:", ip);
   return NextResponse.json({
